@@ -1,5 +1,5 @@
-# A2T1-Bitacora-de-Ejercicios
-Programa para calcular el método numérico "Error Absoluto"
+# A3T2-Software-de-Aplicación
+Programa para calcular el método numérico "Método de Bisección"
 
 ITSVA
 Materia: Métodos Numéricos
