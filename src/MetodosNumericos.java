@@ -4,7 +4,7 @@ import java.util.Scanner;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
-public class ErrorAbsoluto {
+public class MetodosNumericos {
     public static void main(String[] args) {
         //Declaramos las variables a usar, para los datos númericos usamos variables double
         double vverda, vaprox, errAbs;
@@ -101,7 +101,7 @@ public class ErrorAbsoluto {
                         System.out.println("Raíz: " + metodoBiseccion(función, 0, intervalo_A, intervalo_B));
                         System.out.println(); //Se imprime la raíz encontrada
                         loop = false;
-                        
+
                     //Bloque catch para el manejo de errores en la entrada de datos
                     } catch (IOError | ParseException  | NullPointerException | IllegalArgumentException | EvaluationException e) {
                         if (e instanceof IOError) {
