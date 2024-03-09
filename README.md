@@ -12,3 +12,6 @@ Cen Canche Alejandra
 Dzul Lora Jafet Jordan
 León Mukul Suemy Yolanda
 Poot Chan Omar Alejandro
+
+Librerías utilizadas:
+[EvalEx](https://github.com/ezylang/EvalEx)
