@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "d:\\Libraries\\Downloads\\EvalEx-3.1.2.jar"
+        "d:\\Libraries\\Downloads\\EvalEx-3.1.2.jar",
+        "c:\\Users\\Yoga L13\\Downloads\\EvalEx-3.1.2.jar"
     ]
 }
