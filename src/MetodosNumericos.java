@@ -186,4 +186,40 @@ public class MetodosNumericos {
         // Llamada recursiva
         return metodoBiseccion(función, intervalo_M, intervalo_A, intervalo_B);
     }
+
+    public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, double tolerancia, int limiteIteraciones) {
+        if (limiteIteraciones == 0) {
+            return valoresIniciales;
+        }
+
+        double[] valoresSiguientes = new double[valoresIniciales.length];
+        limiteIteraciones -= 1;
+
+        double sum;
+        for (int i = 0; i < valoresIniciales.length; i++) {
+            sum = 0;
+            for (int j = 0; j < matrizCoeficientes.length; j++) {
+                if (j != i) {                    
+                    sum += matrizCoeficientes[i][j] * valoresIniciales[j];
+                }
+            }
+            valoresSiguientes[i] = (resultados[i] - sum)/matrizCoeficientes[i][i];
+            System.out.println("x" + i + ": " + valoresSiguientes[i]);
+            //System.out.println("b" + i + ": " + resultados[i]);
+            //System.out.println("sum: " + sum);
+            //System.out.println("aii: " + matrizCoeficientes[i][i]);
+        }
+        System.out.println();
+
+        sum = 0;
+        for (int i = 0; i < valoresIniciales.length; i++) {
+            sum += Math.pow(valoresSiguientes[i] -  valoresIniciales[i], 2);
+        }
+        double toleranciaActual = Math.sqrt(sum);
+        if (toleranciaActual <= tolerancia) {
+            return valoresSiguientes;
+        } else {
+            return metodoJacobi(matrizCoeficientes, resultados, valoresSiguientes, tolerancia, limiteIteraciones);
+        }
+    }
 }
