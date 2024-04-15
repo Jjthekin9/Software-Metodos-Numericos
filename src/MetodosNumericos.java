@@ -21,7 +21,8 @@ public class MetodosNumericos {
             System.out.println("1.Truncar valor vedadero, valor aproximado y sacar resultado de error absoluto"); //Opción de truncado
             System.out.println("2.Redondear valor vedadero, valor aproximado y sacar resultado de error absoluto"); //Opción de redondeado
             System.out.println("3.Calcular el método de Bisección"); //Opción de método de bisección
-            System.out.println("4.Salir");
+            System.out.println("4.Método de Jacobi");
+            System.out.println("5.Salir");
             opc = t.nextInt();
 
             if (opc == 1) {
@@ -123,7 +124,40 @@ public class MetodosNumericos {
                         }
                     }
                 } while (loop);
-            } else if (opc == 4) {
+            } else if (opc == 4){
+                System.out.println("Ingrese el numero de variables");
+                int n1= t.nextInt();
+        
+                double [][] matrizCoeficientes = new double[n1][n1];
+                System.out.println("Ingrese el valor de los ceficientes");
+        
+                for (int i = 0; i<n1; i++) {
+                    for (int j = 0; j<n1; j++) {
+                        matrizCoeficientes[i][j]=t.nextDouble();
+                    }
+                }
+        
+                double [] resultados= new double[n1];
+                System.out.println("Ingrese los resultados de cada ecuacion");
+        
+                for (int i = 0; i < n1; i++) {
+                    resultados[i]= t.nextDouble();
+                }
+        
+                double valoresIniciales[]= new double[n1];
+                System.out.println("Ingrese los valores inicales de K");
+                for (int i = 0; i <n1; i++) {
+                    valoresIniciales[i]=t.nextDouble();
+                }
+        
+                System.out.println("Escriba la tolerancia");
+                double tolerancia= t.nextDouble();
+                System.out.println("Ingrese el limite de iteraciones");
+                int iteraciones= t.nextInt();
+        
+                metodoJacobi(matrizCoeficientes,resultados,valoresIniciales, tolerancia, iteraciones);
+            
+            } else if (opc == 5) {
                 System.out.println("Saliendo del programa");
             }
         } while (opc != 4);
