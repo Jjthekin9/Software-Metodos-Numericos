@@ -221,7 +221,8 @@ public class MetodosNumericos {
         return metodoBiseccion(función, intervalo_M, intervalo_A, intervalo_B);
     }
 
-    public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, double tolerancia, int limiteIteraciones) {
+    public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, 
+    double tolerancia, int limiteIteraciones) {
         if (limiteIteraciones == 0) {
             return valoresIniciales;
         }
