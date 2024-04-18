@@ -147,7 +147,7 @@ public class MetodosNumericos {
                 }
         
                 double valoresIniciales[]= new double[n1];
-                System.out.println("Ingrese los valores inicales de K");
+                System.out.println("Ingrese los valores la solución inicial");
                 for (int i = 0; i <n1; i++) {
                     valoresIniciales[i]=t.nextDouble();
                 }
@@ -167,7 +167,7 @@ public class MetodosNumericos {
             } else if (opc == 5) {
                 System.out.println("Saliendo del programa");
             }
-        } while (opc != 4);
+        } while (opc != 5);
         t.close();
     }
 
