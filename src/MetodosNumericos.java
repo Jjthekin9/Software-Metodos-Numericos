@@ -221,39 +221,49 @@ public class MetodosNumericos {
         return metodoBiseccion(función, intervalo_M, intervalo_A, intervalo_B);
     }
 
+    //M. RECURSIVO DE JACOBI
+    //Retorna un arreglo con los valores de las variables (x1, x2, ..., xn)
+    //Pide la matriz de coeficientes (c11, c12, ..., cnn), el vector de resultados (b1, b2, ..., bn) y el vector de solución inicial (x0)
+    //También la tolerancia (o error) aceptado y un límite de iteraciones en caso de que la solución no sea convergente
     public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, 
     double tolerancia, int limiteIteraciones) {
-        if (limiteIteraciones == 0) {
+
+        limiteIteraciones -= 1;
+        if (limiteIteraciones == 0) { //Primer caso base, retorna los valores de entrada si el límite de iteraciones llega a cero
             return valoresIniciales;
         }
 
-        double[] valoresSiguientes = new double[valoresIniciales.length];
-        limiteIteraciones -= 1;
+        double[] valoresSiguientes = new double[valoresIniciales.length]; //Nuevo arreglo para guardar la siguiente iteración
 
+        //Ciclo para recorrer la matriz de coeficientes
         double sum;
         for (int i = 0; i < valoresIniciales.length; i++) {
+            /* Para cada "línea" de la matriz de coeficientes (que corresponde a una de las ecuaciones del sistema), se usa otro
+            ciclo "for" para hacer la sumatoria del producto de cada coeficiente por el valor actual de su variable asociada,
+            salvo por el término diagonal de esa ecuación (e.g. a11) */
             sum = 0;
             for (int j = 0; j < matrizCoeficientes.length; j++) {
-                if (j != i) {                    
+                if (j != i) {
                     sum += matrizCoeficientes[i][j] * valoresIniciales[j];
                 }
             }
+            //Se calcula el valor de cada variable para la siguiente iteración usando la formula del método:
+            //xi(k=n) = (bi-(sumatoria(aij+xj(k=n-1))))/aii, para xj != xi
             valoresSiguientes[i] = (resultados[i] - sum)/matrizCoeficientes[i][i];
-            System.out.println("x" + i + ": " + valoresSiguientes[i]);
-            //System.out.println("b" + i + ": " + resultados[i]);
-            //System.out.println("sum: " + sum);
-            //System.out.println("aii: " + matrizCoeficientes[i][i]);
+            System.out.println("x" + i + ": " + valoresSiguientes[i]); //Se imprimen los resultados de cada iteración
         }
         System.out.println();
 
+        //Calculamos la tolerancia de la iteración actual usando la formúla:
+        //T=sqrt((sumatoria(xi(k=n)-xi(k=n-1)))^2)
         sum = 0;
         for (int i = 0; i < valoresIniciales.length; i++) {
             sum += Math.pow(valoresSiguientes[i] -  valoresIniciales[i], 2);
         }
         double toleranciaActual = Math.sqrt(sum);
-        if (toleranciaActual <= tolerancia) {
+        if (toleranciaActual <= tolerancia) { //Segundo caso base, retorna los valores nuevos si la tolerancia es menor o igual a la solicitada
             return valoresSiguientes;
-        } else {
+        } else { //Si no, llama recursivamente el método con los nuevos valores
             return metodoJacobi(matrizCoeficientes, resultados, valoresSiguientes, tolerancia, limiteIteraciones);
         }
     }

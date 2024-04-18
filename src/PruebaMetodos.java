@@ -1,11 +1,4 @@
-import java.util.List;
 import java.util.HashMap;
-import java.util.Set;
-
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.parser.ASTNode;
-import com.ezylang.evalex.parser.ParseException;
 
 public class PruebaMetodos {
     public static void main(String[] args) throws Exception {
