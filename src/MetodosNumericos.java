@@ -1,4 +1,5 @@
 import java.io.IOError;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import com.ezylang.evalex.EvaluationException;
@@ -124,6 +125,7 @@ public class MetodosNumericos {
                         }
                     }
                 } while (loop);
+
             } else if (opc == 4){
                 System.out.println("Ingrese el numero de variables");
                 int n1= t.nextInt();
@@ -154,8 +156,13 @@ public class MetodosNumericos {
                 double tolerancia= t.nextDouble();
                 System.out.println("Ingrese el limite de iteraciones");
                 int iteraciones= t.nextInt();
-        
-                metodoJacobi(matrizCoeficientes,resultados,valoresIniciales, tolerancia, iteraciones);
+
+                try {
+                    double[][] matrizDominante = hacerDominante(matrizCoeficientes);
+                    metodoJacobi(matrizDominante,resultados,valoresIniciales, tolerancia, iteraciones);
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                }
             
             } else if (opc == 5) {
                 System.out.println("Saliendo del programa");
@@ -222,9 +229,9 @@ public class MetodosNumericos {
     }
 
     //M. RECURSIVO DE JACOBI
-    //Retorna un arreglo con los valores de las variables (x1, x2, ..., xn)
-    //Pide la matriz de coeficientes (c11, c12, ..., cnn), el vector de resultados (b1, b2, ..., bn) y el vector de solución inicial (x0)
-    //También la tolerancia (o error) aceptado y un límite de iteraciones en caso de que la solución no sea convergente
+    /* Retorna un arreglo con los valores de las variables (x1, x2, ..., xn)
+     * Pide la matriz de coeficientes (c11, c12, ..., cnn), el vector de resultados (b1, b2, ..., bn) y el vector de solución inicial (x0)
+     * También la tolerancia (o error) aceptado y un límite máximo de iteraciones */
     public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, 
     double tolerancia, int limiteIteraciones) {
 
@@ -239,8 +246,8 @@ public class MetodosNumericos {
         double sum;
         for (int i = 0; i < valoresIniciales.length; i++) {
             /* Para cada "línea" de la matriz de coeficientes (que corresponde a una de las ecuaciones del sistema), se usa otro
-            ciclo "for" para hacer la sumatoria del producto de cada coeficiente por el valor actual de su variable asociada,
-            salvo por el término diagonal de esa ecuación (e.g. a11) */
+             * ciclo "for" para hacer la sumatoria del producto de cada coeficiente por el valor actual de su variable asociada,
+             * salvo por el término diagonal de esa ecuación (e.g. a11) */
             sum = 0;
             for (int j = 0; j < matrizCoeficientes.length; j++) {
                 if (j != i) {
@@ -266,5 +273,55 @@ public class MetodosNumericos {
         } else { //Si no, llama recursivamente el método con los nuevos valores
             return metodoJacobi(matrizCoeficientes, resultados, valoresSiguientes, tolerancia, limiteIteraciones);
         }
+    }
+
+    //M. HACER DOMINANTE
+    /* Recibe una matriz nxn e intenta reordenar sus filas para convertirla en una matriz diagonal dominante, retorna la matriz
+     * ordenada o en caso de que no se pueda hacer dominante arroja una excepción */
+    public static double[][] hacerDominante(double[][] matriz) throws IllegalArgumentException {
+
+        /* Mapa <llave, valor> para relacionar la posición del elemento dominante en una fila con la fila misma,
+         * la fila en este caso corresponde a un arreglo unidimensional */
+        HashMap<Integer, double[]> rankingEcuaciones = new HashMap<>();
+        for (double[] coeficientes : matriz) { //Ciclo para recorrer cada fila de la matriz
+            double sumaAbsCoeficientes = 0;
+            for (int i = 0; i < coeficientes.length; i++) { //Ciclo para sumar el valor absoluto de todos los elementos (coeficientes) de la fila
+                sumaAbsCoeficientes += Math.abs(coeficientes[i]);
+            }
+
+            boolean diagonalDominante = false; //Variable booleana para indicar si la matriz puede ser diagonal dominante
+            for (int i = 0; i < coeficientes.length; i++) { //Ciclo para checar cual elemento de la fila es dominante
+
+                /* Formula para checar dominancia, checamos si la suma absoluta de todos los valores de la fila es menor que el doble
+                 * del elemento a checar. Esto es equivalente a restar el elemento de la suma y checar si el restante es menor que el
+                 * elemento mismo, e.g., a0 > (a1 + a2 + ... + an)*/
+                if (sumaAbsCoeficientes < 2 * Math.abs(coeficientes[i])) {
+                    diagonalDominante = true;
+
+                    /* Si existe un elemento dominante se ingresa toda la fila en el mapa con la posición del elemto dominante como su llave.
+                     * En una matriz dominante diagonal todos los elementos dominantes deben estar en posiciones diferentes (1 por fila: 
+                     * a11, a22, ..., ann), por lo que si se repite la llave indicamos que la matriz no se puede convertir en dominante*/
+                    if (rankingEcuaciones.putIfAbsent(i, coeficientes) != null) {
+                        diagonalDominante = false;
+                        //System.out.println("Condición de error, ranking repetido");
+                        // Condición de error, ranking repetido
+                    }
+                }
+            }
+            if (!diagonalDominante) { //Si la matriz no se puede hacer dominante arrojamos una excepción
+                throw new IllegalArgumentException("La matriz no se puede convertir en diagonal estrictamente dominante");
+                //System.out.println("Condición de error, no existe dominante");
+                // Condición de error, no existe dominante
+            }
+        }
+
+        for (int i = 0; i < matriz.length; i++) { //Ciclo para ordenar la matriz acorde al mapa
+            matriz[i] = rankingEcuaciones.get(i);
+            for (int j = 0; j < matriz.length; j++) { //Ciclo para imprimir la matriz
+                System.out.print(matriz[i][j] + " ");  
+            }
+            System.out.println();
+        }
+        return matriz; //Retorno de la matriz ordenada
     }
 }

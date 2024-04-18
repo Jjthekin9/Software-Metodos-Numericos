@@ -104,25 +104,27 @@ public class PruebaMetodos {
         }
     }
 
-    public static void reordenar(double[][] matriz) {
+    public static double[][] hacerDominante(double[][] matriz) {
         HashMap<Integer, double[]> rankingEcuaciones = new HashMap<>();
         for (double[] coeficientes : matriz) {
             double sumaAbsCoeficientes = 0;
             for (int i = 0; i < coeficientes.length; i++) {
                 sumaAbsCoeficientes += Math.abs(coeficientes[i]);
             }
-            boolean existeDominante = false;
+            boolean diagonalDominante = false;
             for (int i = 0; i < coeficientes.length; i++) {
                 if (sumaAbsCoeficientes < 2 * Math.abs(coeficientes[i])) {
-                    existeDominante = true;
+                    diagonalDominante = true;
                     if (rankingEcuaciones.putIfAbsent(i, coeficientes) != null) {
-                        System.out.println("Condición de error, ranking repetido");
+                        diagonalDominante = false;
+                        //System.out.println("Condición de error, ranking repetido");
                         // Condición de error, ranking repetido
                     }
                 }
             }
-            if (!existeDominante) {
-                System.out.println("Condición de error, no existe dominante");
+            if (!diagonalDominante) {
+                throw new IllegalArgumentException("La matriz no se puede convertir en diagonal estrictamente dominante");
+                //System.out.println("Condición de error, no existe dominante");
                 // Condición de error, no existe dominante
             }
         }
@@ -133,5 +135,6 @@ public class PruebaMetodos {
             }
             System.out.println();
         }
+        return matriz;
     }
 }
