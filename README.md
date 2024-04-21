@@ -1,5 +1,5 @@
 # A3T2-Software-de-Aplicación  
-**Programa para calcular el método numérico "Método de Bisección"**  
+**Programa para calcular distintos métodos numéricos
   
 **ITSVA**  
 **Materia:** Métodos Numéricos  
