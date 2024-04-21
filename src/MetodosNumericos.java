@@ -243,17 +243,18 @@ public class MetodosNumericos {
         double[] valoresSiguientes = new double[valoresIniciales.length]; //Nuevo arreglo para guardar la siguiente iteración
 
         //Ciclo para recorrer la matriz de coeficientes
+        /* Para cada "línea" de la matriz de coeficientes (que corresponde a una de las ecuaciones del sistema), se usa otro
+         * ciclo "for" para hacer la sumatoria del producto de cada coeficiente por el valor actual de su variable asociada,
+         * salvo por el término diagonal de esa ecuación (e.g. a11) */
         double sum;
         for (int i = 0; i < valoresIniciales.length; i++) {
-            /* Para cada "línea" de la matriz de coeficientes (que corresponde a una de las ecuaciones del sistema), se usa otro
-             * ciclo "for" para hacer la sumatoria del producto de cada coeficiente por el valor actual de su variable asociada,
-             * salvo por el término diagonal de esa ecuación (e.g. a11) */
             sum = 0;
             for (int j = 0; j < matrizCoeficientes.length; j++) {
                 if (j != i) {
                     sum += matrizCoeficientes[i][j] * valoresIniciales[j];
                 }
             }
+
             //Se calcula el valor de cada variable para la siguiente iteración usando la formula del método:
             //xi(k=n) = (bi-(sumatoria(aij+xj(k=n-1))))/aii, para xj != xi
             valoresSiguientes[i] = (resultados[i] - sum)/matrizCoeficientes[i][i];
@@ -267,6 +268,7 @@ public class MetodosNumericos {
         for (int i = 0; i < valoresIniciales.length; i++) {
             sum += Math.pow(valoresSiguientes[i] -  valoresIniciales[i], 2);
         }
+
         double toleranciaActual = Math.sqrt(sum);
         if (toleranciaActual <= tolerancia) { //Segundo caso base, retorna los valores nuevos si la tolerancia es menor o igual a la solicitada
             return valoresSiguientes;
