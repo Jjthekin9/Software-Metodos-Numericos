@@ -1,11 +1,17 @@
 import java.util.HashMap;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.ParseException;
+
 public class PruebaMetodos {
     public static void main(String[] args) throws Exception {
-        double[][] m = new double[][] {{10,1,2},{4,6,-1},{-2,3,8}};
-        double[] b = new double[] {3,9,51};
-        double[] x = new double[] {0.3,1.5,6.375};
-        jacobi(m, b, x, 0.01, 100);
+        Expression función = new Expression("e^x");
+        double inicioIntervalo = 0;
+        double finIntervalo = 1;
+        int divisiones = 6;
+        double integral = simpson(función, inicioIntervalo, finIntervalo, divisiones);
+        System.out.println(integral);
     }
 
     //M. TRUNCAR
@@ -136,5 +142,44 @@ public class PruebaMetodos {
             System.out.println();
         }
         return matriz;
+    }
+
+    public static double simpson(Expression función, double inicioIntervalo, double finIntervalo, int divisiones) 
+    throws ParseException, EvaluationException {
+        if (finIntervalo <= inicioIntervalo) {
+            throw new IllegalArgumentException("EL fin del intervalo debe ser mayor que el inicio!!");
+        }
+        función.validate();
+
+        double incremento = (finIntervalo - inicioIntervalo)/divisiones;
+        double límite = finIntervalo - incremento;
+        double sumaEvaluaciones = función.with("x", inicioIntervalo).evaluate().getNumberValue().doubleValue();
+        System.out.println("F(x0) = " + sumaEvaluaciones);
+        sumaEvaluaciones += simpsonEvaluarTerminoNon(función, inicioIntervalo + incremento, incremento, límite, 0);
+        System.out.println("Sum(F(x1), F(xn-1)) = " + sumaEvaluaciones);
+        sumaEvaluaciones += función.with("x", finIntervalo).evaluate().getNumberValue().doubleValue();
+        return (incremento/3)*sumaEvaluaciones;
+    }
+
+    public static double simpsonEvaluarTerminoNon(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones) 
+    throws EvaluationException, ParseException {
+        if (termino > límite) {
+            return sumaEvaluaciones;
+        }
+        sumaEvaluaciones += (4*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
+        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        System.out.println("sum = " + sumaEvaluaciones + "\n");
+        return simpsonEvaluarTerminoPar(función, termino + incremento, incremento, límite, sumaEvaluaciones);
+    }
+
+    public static double simpsonEvaluarTerminoPar(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones) 
+    throws EvaluationException, ParseException {
+        if (termino > límite) {
+            return sumaEvaluaciones;
+        }
+        sumaEvaluaciones += (2*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
+        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        System.out.println("sum = " + sumaEvaluaciones + "\n");
+        return simpsonEvaluarTerminoNon(función, termino + incremento, incremento, límite, sumaEvaluaciones);
     }
 }
