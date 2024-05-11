@@ -144,42 +144,64 @@ public class PruebaMetodos {
         return matriz;
     }
 
+    //M. SIMPSON (regla de tercios)
+    /*Método de integración numérica por polinomios de simpson
+     *Recibe la funcíon a integrar (F(x)) como objeto de tipo "Expression" (de la librería EvalEx), el inicio (a) y fin (b) del
+     *intervalo en el que se va a integrar y el número de divisiones (n) del intervalo.
+     *El método puede arrojar una de dos excepciones si la función es inválida o surge un error al evaluarla.*/
     public static double simpson(Expression función, double inicioIntervalo, double finIntervalo, int divisiones) 
     throws ParseException, EvaluationException {
-        if (finIntervalo <= inicioIntervalo) {
+        if (finIntervalo <= inicioIntervalo) { //Validación del intervalo
             throw new IllegalArgumentException("EL fin del intervalo debe ser mayor que el inicio!!");
         }
-        función.validate();
+        función.validate(); //Validación de la función
 
-        double incremento = (finIntervalo - inicioIntervalo)/divisiones;
-        double límite = finIntervalo - incremento;
+        double incremento = (finIntervalo - inicioIntervalo)/divisiones; //Calculo del incremento por division (b-a)/n
+        double límite = finIntervalo - incremento; //Límite para las llamadas recursivas
+
+        //Se inicia el acumulador de evaluaciones (f(x) en cada incremento) con el inicio del intervalo
         double sumaEvaluaciones = función.with("x", inicioIntervalo).evaluate().getNumberValue().doubleValue();
-        System.out.println("F(x0) = " + sumaEvaluaciones);
+        //System.out.println("F(x0) = " + sumaEvaluaciones); 
+
+        /*Se llama a los métodos recursivos para acumular las evaluaciones entre el inicio y fin del intervalo.
+         *Los métodos recursivos alternan entre terminos pares y nones para multiplicarlos por el coeficiente que corresponda. */
         sumaEvaluaciones += simpsonEvaluarTerminoNon(función, inicioIntervalo + incremento, incremento, límite, 0);
-        System.out.println("Sum(F(x1), F(xn-1)) = " + sumaEvaluaciones);
+        //System.out.println("Sum(F(x1), F(xn-1)) = " + sumaEvaluaciones);
+
+        //Por último se agrega al acumulador la evaluación del fin del intervalo
         sumaEvaluaciones += función.with("x", finIntervalo).evaluate().getNumberValue().doubleValue();
+
+        //Retorna la aproximacíon de la integral definida multiplicando la suma de evaluaciones por el incremento/3 (regla de tercios)
         return (incremento/3)*sumaEvaluaciones;
     }
 
-    public static double simpsonEvaluarTerminoNon(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones) 
+    //M. EVALUAR TÉRMINO NON
+    /*Método recursivo complementario para el método de simpson, esté método recibe toda la información relevante para evaluar un
+     *termino dentro del intervalo de la integral y acumularlo en la suma de evaluaciones.
+     *Como indica la regla de tercios del método de Simpson, los terminos nones (considerando el inicio del intervalo como termino 0
+     *se evaluan y se multiplican por 4.*/
+    public static double simpsonEvaluarTerminoNon(Expression función, double término, double incremento, double límite, double sumaEvaluaciones) 
     throws EvaluationException, ParseException {
-        if (termino > límite) {
+        if (término >= límite) { //Caso base, retorna la suma acumulada si el termino recibido es igual o mayor al límite
             return sumaEvaluaciones;
         }
-        sumaEvaluaciones += (4*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
-        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        sumaEvaluaciones += (4*(función.with("x", término).evaluate().getNumberValue().doubleValue())); //Se acumula la evaluación
+        System.out.println("F(" + término + ") = " + función.with("x", término).evaluate().getNumberValue().doubleValue());
         System.out.println("sum = " + sumaEvaluaciones + "\n");
-        return simpsonEvaluarTerminoPar(función, termino + incremento, incremento, límite, sumaEvaluaciones);
+        return simpsonEvaluarTerminoPar(función, término + incremento, incremento, límite, sumaEvaluaciones); //Llamada recursiva
     }
 
-    public static double simpsonEvaluarTerminoPar(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones) 
+    //M. EVALUAR TÉRMINO PAR
+    /*El otro método recursivo complementario para el método de Simpson, idéntico al método para evaluar términos nones con la única
+     *diferencia de que los terminos pares se multiplican por 2 y no por 4.*/
+    public static double simpsonEvaluarTerminoPar(Expression función, double término, double incremento, double límite, double sumaEvaluaciones) 
     throws EvaluationException, ParseException {
-        if (termino > límite) {
+        if (término >= límite) {
             return sumaEvaluaciones;
         }
-        sumaEvaluaciones += (2*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
-        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        sumaEvaluaciones += (2*(función.with("x", término).evaluate().getNumberValue().doubleValue()));
+        System.out.println("F(" + término + ") = " + función.with("x", término).evaluate().getNumberValue().doubleValue());
         System.out.println("sum = " + sumaEvaluaciones + "\n");
-        return simpsonEvaluarTerminoNon(función, termino + incremento, incremento, límite, sumaEvaluaciones);
+        return simpsonEvaluarTerminoNon(función, término + incremento, incremento, límite, sumaEvaluaciones);
     }
 }

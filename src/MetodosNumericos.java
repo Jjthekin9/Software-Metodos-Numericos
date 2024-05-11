@@ -6,7 +6,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
 public class MetodosNumericos {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException, EvaluationException {
         //Declaramos las variables a usar, para los datos númericos usamos variables double
         double vverda, vaprox, errAbs;
         int decimales;
@@ -14,6 +14,19 @@ public class MetodosNumericos {
         Expression función = null;
         double intervalo_A = 0.0;
         double intervalo_B = 0.0;
+        función = new Expression("e^x");
+        double inicioIntervalo = 0;
+        double finIntervalo = 1;
+        int divisiones = 6;
+        double integral = 0;
+        try {
+            integral = simpson(función, inicioIntervalo, finIntervalo, divisiones);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } catch (EvaluationException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(integral);
         Scanner t = new Scanner(System.in);
         do {
             //Menú principal del programa
@@ -22,12 +35,13 @@ public class MetodosNumericos {
             System.out.println("1.Truncar valor vedadero, valor aproximado y sacar resultado de error absoluto"); //Opción de truncado
             System.out.println("2.Redondear valor vedadero, valor aproximado y sacar resultado de error absoluto"); //Opción de redondeado
             System.out.println("3.Calcular el método de Bisección"); //Opción de método de bisección
-            System.out.println("4.Método de Jacobi");
-            System.out.println("5.Salir");
+            System.out.println("4.Calcular el metodo de Simpson");
+            System.out.println("5.Método de Jacobi");
+            System.out.println("6.Salir");
             opc = t.nextInt();
 
             if (opc == 1) {
-                /* 
+                /*
                  //Se pide al usuario que ingrese el valor verdadero y el aproximado
                  System.out.println("Dame el valor verdadero: ");
                  vverda = t.nextDouble();
@@ -36,7 +50,7 @@ public class MetodosNumericos {
                  //Así como el número de posiciones decimales deseadas
                  System.out.println("Dame el numero de decimales a los que desea truncar");
                  decimales = t.nextInt();
- 
+
                  //Se calcula el error absoluto restando el valor apróximado del verdadero
                  errAbs = Math.abs(vverda - vaprox);
                  //Imprimimos el valor completo, el número de decimales deseados y el valor truncado
@@ -104,12 +118,12 @@ public class MetodosNumericos {
                         System.out.println(); //Se imprime la raíz encontrada
                         loop = false;
 
-                    //Bloque catch para el manejo de errores en la entrada de datos
+                        //Bloque catch para el manejo de errores en la entrada de datos
                     } catch (IOError | ParseException  | NullPointerException | IllegalArgumentException | EvaluationException e) {
                         if (e instanceof IOError) {
                             System.out.println("Error de captura - " + e.getMessage());
                         } else if (e instanceof ParseException) {
-                            System.out.println("Función inválida - " + e.getMessage());                            
+                            System.out.println("Función inválida - " + e.getMessage());
                         } else if (e instanceof NullPointerException) {
                             System.out.println("Valor de intervalo nulo - " + e.getMessage());
                         } else if (e instanceof IllegalArgumentException) {
@@ -127,31 +141,47 @@ public class MetodosNumericos {
                 } while (loop);
 
             } else if (opc == 4){
+                System.out.println("Ingrese la función a integrar:");
+                String funcionStr = t.nextLine();
+                funcionStr = t.nextLine();
+                función = new Expression(funcionStr);
+                System.out.println("Ingrese el inicio del intervalo:");
+                inicioIntervalo = t.nextDouble();
+
+                System.out.println("Ingrese el fin del intervalo:");
+                finIntervalo = t.nextDouble();
+
+                System.out.println("Ingrese el número de divisiones:");
+                divisiones = t.nextInt();
+
+                System.out.println("El resultado de la integral es: " + integral);
+
+            } else if (opc == 5) {
                 System.out.println("Ingrese el numero de variables");
                 int n1= t.nextInt();
-        
+
                 double [][] matrizCoeficientes = new double[n1][n1];
                 System.out.println("Ingrese el valor de los ceficientes");
-        
+
                 for (int i = 0; i<n1; i++) {
                     for (int j = 0; j<n1; j++) {
                         matrizCoeficientes[i][j]=t.nextDouble();
                     }
                 }
-        
+
                 double [] resultados= new double[n1];
                 System.out.println("Ingrese los resultados de cada ecuacion");
-        
+
                 for (int i = 0; i < n1; i++) {
                     resultados[i]= t.nextDouble();
                 }
-        
+
                 double valoresIniciales[]= new double[n1];
                 System.out.println("Ingrese los valores la solución inicial");
                 for (int i = 0; i <n1; i++) {
                     valoresIniciales[i]=t.nextDouble();
                 }
-        
+
                 System.out.println("Escriba la tolerancia");
                 double tolerancia= t.nextDouble();
                 System.out.println("Ingrese el limite de iteraciones");
@@ -163,11 +193,11 @@ public class MetodosNumericos {
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
-            
-            } else if (opc == 5) {
+            }
+            else if (opc==6){
                 System.out.println("Saliendo del programa");
             }
-        } while (opc != 5);
+        } while (opc != 6);
         t.close();
     }
 
@@ -195,7 +225,7 @@ public class MetodosNumericos {
     }
 
     public static double metodoBiseccion(Expression función, double intervalo_M, double intervalo_A, double intervalo_B)
-    throws EvaluationException, ParseException {
+            throws EvaluationException, ParseException {
         // Caclulo de error y punto medio
         double error = (intervalo_B - intervalo_A) / 2;
         intervalo_M = (intervalo_A + intervalo_B) / 2;
@@ -232,8 +262,8 @@ public class MetodosNumericos {
     /* Retorna un arreglo con los valores de las variables (x1, x2, ..., xn)
      * Pide la matriz de coeficientes (c11, c12, ..., cnn), el vector de resultados (b1, b2, ..., bn) y el vector de solución inicial (x0)
      * También la tolerancia (o error) aceptado y un límite máximo de iteraciones */
-    public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales, 
-    double tolerancia, int limiteIteraciones) {
+    public static double[] metodoJacobi(double[][] matrizCoeficientes, double[] resultados, double[] valoresIniciales,
+                                        double tolerancia, int limiteIteraciones) {
 
         limiteIteraciones -= 1;
         if (limiteIteraciones == 0) { //Primer caso base, retorna los valores de entrada si el límite de iteraciones llega a cero
@@ -301,7 +331,7 @@ public class MetodosNumericos {
                     diagonalDominante = true;
 
                     /* Si existe un elemento dominante se ingresa toda la fila en el mapa con la posición del elemto dominante como su llave.
-                     * En una matriz dominante diagonal todos los elementos dominantes deben estar en posiciones diferentes (1 por fila: 
+                     * En una matriz dominante diagonal todos los elementos dominantes deben estar en posiciones diferentes (1 por fila:
                      * a11, a22, ..., ann), por lo que si se repite la llave indicamos que la matriz no se puede convertir en dominante*/
                     if (rankingEcuaciones.putIfAbsent(i, coeficientes) != null) {
                         diagonalDominante = false;
@@ -320,10 +350,83 @@ public class MetodosNumericos {
         for (int i = 0; i < matriz.length; i++) { //Ciclo para ordenar la matriz acorde al mapa
             matriz[i] = rankingEcuaciones.get(i);
             for (int j = 0; j < matriz.length; j++) { //Ciclo para imprimir la matriz
-                System.out.print(matriz[i][j] + " ");  
+                System.out.print(matriz[i][j] + " ");
             }
             System.out.println();
         }
         return matriz; //Retorno de la matriz ordenada
+    }
+
+    public static void ranking(double[][] m) {
+        int posiciónMayor;
+        double mayor;
+        for (double[] ds : m) {
+            posiciónMayor = -1;
+            mayor = Double.NEGATIVE_INFINITY;
+            for (int i = 0; i < m.length; i++) {
+                if (ds[i] > mayor) {
+                    mayor = ds[i];
+                    posiciónMayor = i;
+                }
+            }
+            System.out.println(ds + "Mayor: " + mayor + ", Posción: " + posiciónMayor);
+        }
+        double sumaAbsCoeficientes;
+        int posiciónDominante;
+        double dominante;
+        for (double[] ds : m) {
+            sumaAbsCoeficientes = 0;
+            posiciónDominante = -1;
+            dominante = Double.NaN;
+            for (int i = 0; i < ds.length; i++) {
+                sumaAbsCoeficientes += Math.abs(ds[i]);
+            }
+            for (int i = 0; i < ds.length; i++) {
+                if (sumaAbsCoeficientes < 2 * Math.abs(ds[i])) {
+                    posiciónDominante = i;
+                    dominante = ds[i];
+                }
+            }
+            System.out.println(ds + "Dominante: " + dominante + ", Posción: " + posiciónDominante);
+        }
+    }
+
+    public static double simpson(Expression función, double inicioIntervalo, double finIntervalo, int divisiones)
+            throws ParseException, EvaluationException {
+        if (finIntervalo <= inicioIntervalo) {
+            throw new IllegalArgumentException("EL fin del intervalo debe ser mayor que el inicio!!");
+        }
+        función.validate();
+
+        double incremento = (finIntervalo - inicioIntervalo)/divisiones;
+        double límite = finIntervalo - incremento;
+        double sumaEvaluaciones = función.with("x", inicioIntervalo).evaluate().getNumberValue().doubleValue();
+        System.out.println("F(x0) = " + sumaEvaluaciones);
+        sumaEvaluaciones += simpsonEvaluarTerminoNon(función, inicioIntervalo + incremento, incremento, límite, 0);
+        System.out.println("Sum(F(x1), F(xn-1)) = " + sumaEvaluaciones);
+        sumaEvaluaciones += función.with("x", finIntervalo).evaluate().getNumberValue().doubleValue();
+        return (incremento/3)*sumaEvaluaciones;
+    }
+
+    public static double simpsonEvaluarTerminoNon(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones)
+            throws EvaluationException, ParseException {
+        if (termino > límite) {
+            return sumaEvaluaciones;
+        }
+        sumaEvaluaciones += (4*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
+        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        System.out.println("sum = " + sumaEvaluaciones + "\n");
+        return simpsonEvaluarTerminoPar(función, termino + incremento, incremento, límite, sumaEvaluaciones);
+    }
+
+    public static double simpsonEvaluarTerminoPar(Expression función, double termino, double incremento, double límite, double sumaEvaluaciones)
+            throws EvaluationException, ParseException {
+        if (termino > límite) {
+            return sumaEvaluaciones;
+        }
+        sumaEvaluaciones += (2*(función.with("x", termino).evaluate().getNumberValue().doubleValue()));
+        System.out.println("F(" + termino + ") = " + función.with("x", termino).evaluate().getNumberValue().doubleValue());
+        System.out.println("sum = " + sumaEvaluaciones + "\n");
+        return simpsonEvaluarTerminoNon(función, termino + incremento, incremento, límite, sumaEvaluaciones);
     }
 }
