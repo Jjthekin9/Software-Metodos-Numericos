@@ -6,12 +6,9 @@ import com.ezylang.evalex.parser.ParseException;
 
 public class PruebaMetodos {
     public static void main(String[] args) throws Exception {
-        Expression función = new Expression("e^x");
-        double inicioIntervalo = 0;
-        double finIntervalo = 1;
-        int divisiones = 6;
-        double integral = simpson(función, inicioIntervalo, finIntervalo, divisiones);
-        System.out.println(integral);
+        Expression función = new Expression("(x-1)(x-2)");
+        String resultado = función.evaluate().getStringValue();
+        System.out.println(resultado);
     }
 
     //M. TRUNCAR

@@ -10,23 +10,14 @@ public class MetodosNumericos {
         //Declaramos las variables a usar, para los datos númericos usamos variables double
         double vverda, vaprox, errAbs;
         int decimales;
-        int opc;
-        Expression función = null;
-        double intervalo_A = 0.0;
-        double intervalo_B = 0.0;
-        función = new Expression("e^x");
+        Expression función;
+        double intervalo_A;
+        double intervalo_B;
         double inicioIntervalo = 0;
         double finIntervalo = 1;
         int divisiones = 6;
         double integral = 0;
-        try {
-            integral = simpson(función, inicioIntervalo, finIntervalo, divisiones);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        } catch (EvaluationException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(integral);
+        int opc;
         Scanner t = new Scanner(System.in);
         do {
             //Menú principal del programa
@@ -37,7 +28,8 @@ public class MetodosNumericos {
             System.out.println("3.Calcular el método de Bisección"); //Opción de método de bisección
             System.out.println("4.Calcular el metodo de Simpson");
             System.out.println("5.Método de Jacobi");
-            System.out.println("6.Salir");
+            System.out.println("6.Interpolación de Lagrange");
+            System.out.println("7.Salir");
             opc = t.nextInt();
 
             if (opc == 1) {
@@ -194,7 +186,33 @@ public class MetodosNumericos {
                     System.out.println(e.getMessage());
                 }
             }
+
             else if (opc==6){
+                try {
+                    System.out.print("Ingrese el número de puntos de datos: ");
+                    int numDatoPuntos = t.nextInt();
+        
+                    double[] x = new double[numDatoPuntos]; // Arreglo para almacenar los valores de x
+                    double[] y = new double[numDatoPuntos]; // Arreglo para almacenar los valores de y
+        
+                    System.out.println("Ingrese los valores de x e y:");
+                    Lagrange.datoReal(x, y, t); // Método para leer los valores de x e y
+        
+                    System.out.print("Ingrese el valor para interpolar: ");
+                    double n = t.nextDouble(); // Lee el valor para interpolar desde la entrada estándar
+        
+                    // Calcula el valor interpolado utilizando el método de Lagrange
+                    double valorInterpolado = Lagrange.interpolar(x, y, n);
+                    // Muestra el valor interpolado en la salida estándar
+                    System.out.println("El valor interpolado en " + n + " es: " + valorInterpolado);
+                } catch (Exception e) {
+                    System.out.println("Error: Ingrese un valor válido.");
+                } finally {
+                    t.close(); // Cierra el scanner para evitar fugas de recursos
+                }
+            }
+
+            else if (opc==7){
                 System.out.println("Saliendo del programa");
             }
         } while (opc != 6);
