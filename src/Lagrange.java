@@ -33,7 +33,7 @@ public class Lagrange {
 
     public static void main(String[] args) {
         Scanner t= new Scanner(System.in);
-
+        
         try {
             System.out.print("Ingrese el número de puntos de datos: ");
             int numDatoPuntos = t.nextInt();
