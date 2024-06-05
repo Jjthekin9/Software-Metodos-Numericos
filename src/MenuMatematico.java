@@ -142,9 +142,9 @@ public class MenuMatematico {
 
                 case 22:
                     System.out.println("Método de Taylor seleccionado.");
-
-
+                    Taylor.metodoTaylor(scanner);
                     break;
+
                 case 23:
                     System.out.println("Método de Adams-Bashforth seleccionado.");
                     AdamsBashforth.metodoAdamsBashforth(scanner);
