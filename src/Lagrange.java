@@ -31,9 +31,14 @@ public class Lagrange {
         }
     }
 
+    public static String obtenerPolinomio() {
+        Polinomio.TerminoX x;
+        return "";
+    }
+
     public static void main(String[] args) {
         Scanner t= new Scanner(System.in);
-        
+
         try {
             System.out.print("Ingrese el número de puntos de datos: ");
             int numDatoPuntos = t.nextInt();
@@ -55,32 +60,6 @@ public class Lagrange {
             System.out.println("Error: Ingrese un valor válido.");
         } finally {
             t.close(); // Cierra el scanner para evitar fugas de recursos
-        }
-    }
-
-    public class TerminoX {
-        double coeficiente;
-        int potencia;
-
-        TerminoX(double coeficiente, int potencia){
-            this.coeficiente = coeficiente;
-            this.potencia = potencia;
-        }
-
-        TerminoX(double coeficiente){
-            this.coeficiente = coeficiente;
-            potencia = 0;
-        }
-    }
-
-    public class Polinomio {
-        TerminoX[] terminos;
-        
-        Polinomio(TerminoX x, TerminoX ... xi){
-            terminos[0] = x;
-            for (int i = 1; i < xi.length; i++) {
-                terminos[i] = xi[i];
-            }
         }
     }
 }
