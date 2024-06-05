@@ -37,7 +37,7 @@ public class MenuMatematico {
             switch (opcion) {
                 case 1:
                     System.out.println("Cifra significativa seleccionado.");
-
+                    CifraSignificativa.metodoCifraSignificativa(scanner);
                     break;
 
                 case 2:
@@ -47,6 +47,7 @@ public class MenuMatematico {
 
                 case 3:
                     System.out.println("Exactitud seleccionado.");
+                    Exactitud.metodoExactitud(scanner);
                     break;
 
                 case 4:
