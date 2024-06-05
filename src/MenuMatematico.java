@@ -38,18 +38,17 @@ public class MenuMatematico {
                 case 1:
                     System.out.println("Cifra significativa seleccionado.");
 
-
                     break;
+
                 case 2:
                     System.out.println("Precisión seleccionado.");
-
-
+                    Precision.metodoPresicion(scanner);
                     break;
+
                 case 3:
                     System.out.println("Exactitud seleccionado.");
-
-
                     break;
+
                 case 4:
                     System.out.println("Sesgo seleccionado.");
                     Sesgo.metodoSesgo(scanner);
@@ -57,8 +56,6 @@ public class MenuMatematico {
 
                 case 5:
                     System.out.println("Error absoluto seleccionado.");
-
-
                     break;
 
                 case 6:
@@ -68,24 +65,21 @@ public class MenuMatematico {
 
                 case 7:
                     System.out.println("Truncamiento seleccionado.");
-
-
                     break;
+
                 case 8:
                     System.out.println("Redondeo seleccionado.");
-
-
                     break;
+
                 case 9:
                     System.out.println("Método de bisección seleccionado.");
-
-
                     break;
+
                 case 10:
                     System.out.println("Método de punto fijo seleccionado.");
-
-
+                    PuntoFijo.metodoPuntoFijo(scanner);
                     break;
+
                 case 11:
                     System.out.println("Interpolación de Newton seleccionado.");
                     InterpolacionNewton.metodoInterpolacionNewton(scanner);
@@ -93,29 +87,26 @@ public class MenuMatematico {
 
                 case 12:
                     System.out.println("Método de Jacobi seleccionado.");
-
-
                     break;
+
                 case 13:
                     System.out.println("Método de Gauss-Seidel seleccionado.");
-
-
+                    GaussSeidel.metodoGaussSeidel(scanner);
                     break;
+
                 case 14:
                     System.out.println("Diferenciación numérica seleccionado.");
-
-
                     break;
+
                 case 15:
                     System.out.println("Regla del trapecio seleccionado.");
-
-
+                    MetodoTrapecio.metodoTrapecio(scanner);
                     break;
+
                 case 16:
                     System.out.println("Regla de Simpson seleccionado.");
-
-
                     break;
+
                 case 17:
                     System.out.println("Polinomio de interpolación de Newton seleccionado.");
                     PolinomioNewton.metodoPolinomioNewton(scanner);
