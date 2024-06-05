@@ -65,15 +65,18 @@ public class MenuMatematico {
                     break;
 
                 case 7:
-                    System.out.println("Truncamiento seleccionado.");
+                    System.out.println("Error absoluto Truncamiento seleccionado.");
+                    Truncador.truncarValores(scanner);
                     break;
 
                 case 8:
-                    System.out.println("Redondeo seleccionado.");
+                    System.out.println("Error absoluto Redondeo seleccionado.");
+                    Redondeador.redondearValores(scanner);
                     break;
 
                 case 9:
                     System.out.println("Método de bisección seleccionado.");
+                    Simpson.calcularSimpson(scanner);
                     break;
 
                 case 10:
@@ -88,6 +91,7 @@ public class MenuMatematico {
 
                 case 12:
                     System.out.println("Método de Jacobi seleccionado.");
+                    Jacobi.calcularJacobi(scanner);
                     break;
 
                 case 13:
@@ -106,6 +110,7 @@ public class MenuMatematico {
 
                 case 16:
                     System.out.println("Regla de Simpson seleccionado.");
+                    Simpson.calcularSimpson(scanner);
                     break;
 
                 case 17:
@@ -115,6 +120,7 @@ public class MenuMatematico {
 
                 case 18:
                     System.out.println("Polinomio de interpolación de Lagrange seleccionado.");
+                    Lagrange.calcularLagrange(scanner);
                     break;
 
                 case 19:
